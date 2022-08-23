@@ -12,15 +12,28 @@ const btnNew = document.querySelector('.btn--new');
 const btnRoll = document.querySelector('.btn--roll');
 const btnhold = document.querySelector('.btn--hold');
 
-// Empezar las condiciones
-score0El.textContent = 0;
-score1El.textContent = 0;
-diceEl.classList.add('hidden');
+let scores, currentScore, activePlayer, playing;
 
-const scores = [0, 0];
-let currentScore = 0;
-let activePlayer = 0;
-let playing = true;
+// Empezar las condiciones
+
+const init = function () {
+  scores = [0, 0];
+  currentScore = 0;
+  activePlayer = 0;
+  playing = true;
+
+  score0El.textContent = 0;
+  score1El.textContent = 0;
+  current0El.textContent = 0;
+  current1El.textContent = 0;
+
+  diceEl.classList.add('hidden');
+  player0El.classList.remove('player--winner');
+  player1El.classList.remove('player--winner');
+  player0El.classList.add('player--active');
+  player1El.classList.remove('player--active');
+};
+init();
 
 const switchPlayer = function () {
   document.getElementById(`current--${activePlayer}`).textContent = 0;
@@ -32,7 +45,7 @@ const switchPlayer = function () {
 
 //funcionalidad de los dados rodantes
 btnRoll.addEventListener('click', function () {
-  if(playing) {
+  if (playing) {
     // 1. Generando una tirada de dados aleatoria
     const dice = Math.trunc(Math.random() * 6) + 1;
     console.log(dice);
@@ -55,19 +68,26 @@ btnRoll.addEventListener('click', function () {
 btnhold.addEventListener('click', function () {
   if (playing) {
     // 1. Agregue la puntuacion actual a la puntuacion del jugador activo
-      scores[activePlayer] += currentScore;
-    document.getElementById(`score--${activePlayer}`).textContent = scores[activePlayer];
-        scores[activePlayer]
-      // 2. comprobar si la puntuación del jugador >= 100
+    scores[activePlayer] += currentScore;
+    document.getElementById(`score--${activePlayer}`).textContent =
+      scores[activePlayer];
+    scores[activePlayer];
+    // 2. comprobar si la puntuación del jugador >= 100
     if (scores[activePlayer] >= 20) {
       // terminar el juego
       playing = false;
       diceEl.classList.add('hidden');
-        document.querySelector(`.player--${activePlayer}`).classList.add('player--winner');
-        document.querySelector(`.player--${activePlayer}`).classList.remove('player--active');
+      document
+        .querySelector(`.player--${activePlayer}`)
+        .classList.add('player--winner');
+      document
+        .querySelector(`.player--${activePlayer}`)
+        .classList.remove('player--active');
     } else {
       // Cambiar al siguiente jugador
       switchPlayer();
     }
-  }  
+  }
 });
+
+btnNew.addEventListener('click', init);
